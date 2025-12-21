@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: iacp-postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-iacp}
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - iacp-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: iacp-backend
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 4501
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      # Pass individual components - backend will construct DATABASE_URL from these
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-iacp}
+      # DATABASE_URL can be set in .env, or backend will construct it from components above
+      DATABASE_URL: ${DATABASE_URL:-}
+    ports:
+      - "4501:4501"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - iacp-network
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo 'Waiting for database to be ready...' &&
+        until pg_isready -h postgres -p 5432 -U postgres > /dev/null 2>&1; do
+          echo 'Waiting for postgres...'
+          sleep 2
+        done &&
+        echo 'Database is ready!' &&
+        echo 'Generating migrations if needed...' &&
+        (npm run db:generate || echo 'Migrations already exist or will be created') &&
+        echo 'Running migrations...' &&
+        npm run db:migrate &&
+        echo 'Starting server...' &&
+        node dist/server.js
+      "
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: iacp-frontend
+    ports:
+      - "4500:8080"
+    depends_on:
+      - backend
+    networks:
+      - iacp-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  iacp-network:
+    driver: bridge
+

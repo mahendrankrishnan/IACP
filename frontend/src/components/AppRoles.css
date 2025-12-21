@@ -1,0 +1,236 @@
+.app-roles-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-roles-card {
+  background: white;
+  border-radius: 10px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.app-roles-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.app-roles-header h1 {
+  color: #333;
+  margin: 0;
+  font-size: 2rem;
+}
+
+.app-selector {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.app-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.app-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.assignment-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.assignment-section h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.assignment-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.role-select {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+}
+
+.assign-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+
+.assign-button:hover:not(:disabled) {
+  background: #5568d3;
+}
+
+.assign-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.info-message {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #e7f3ff;
+  color: #0066cc;
+  border-radius: 5px;
+  border: 1px solid #b3d9ff;
+}
+
+.assigned-roles-section {
+  margin-top: 2rem;
+}
+
+.assigned-roles-section h2 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.app-roles-table-container {
+  overflow-x: auto;
+  margin-top: 1.5rem;
+}
+
+.app-roles-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.app-roles-table thead {
+  background: #667eea;
+  color: white;
+}
+
+.app-roles-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.app-roles-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+}
+
+.app-roles-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.app-roles-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.remove-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.remove-button:hover {
+  background: #c82333;
+}
+
+.app-roles-table th:last-child,
+.app-roles-table td:last-child {
+  text-align: center;
+  width: 150px;
+}
+
+.no-roles {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.no-roles p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.no-applications {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.no-applications p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error-message {
+  background: #fee;
+  color: #c33;
+  padding: 0.75rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  border: 1px solid #fcc;
+}
+
+@media (max-width: 768px) {
+  .assignment-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .app-roles-table {
+    font-size: 0.9rem;
+  }
+
+  .app-roles-table th,
+  .app-roles-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+

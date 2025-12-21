@@ -2,20 +2,6 @@
 
 A custom authentication Service Provider for providing authentication & authorization service. This application is called IdentityAuthClaimProvider(IACP) - Identity → Who the user is, Auth → Authentication / Authorization,Claim → What attributes/permissions are issued,Provider → Source of truth, built with TypeScript, Node.js Fastify backend, PostgreSQL, Drizzle ORM, and React frontend. This service allows you to configure claim details (username, email) and generate JWT tokens for authentication.
 
-## Tech Stack
-
-### Frontend
-- React
-- TypeScript
-
-### Backend
-- Node.js
-- TypeScript
-- Fastify
-- Drizzle ORM
-
-### Database 
-- PostgreSQL
 
 ## Features
 
