@@ -10,7 +10,7 @@ dotenv.config();
 
 const fastify = Fastify({ logger: true });
 
-// Register plugins
+// Here we are registering the plugins
 await fastify.register(cors, {
   origin: true,
   credentials: true,
@@ -46,11 +46,16 @@ Authorization: Bearer <your-token>
 
 The API is available at: \`http://localhost:${process.env.PORT || 4501}\`
 
+## API Documentation
+
+Interactive Swagger UI is available at: \`http://localhost:${process.env.PORT || 4501}/docs\`
+
 ## Getting Started
 
 1. Register a new user at \`POST /api/auth/register\`
 2. Login at \`POST /api/auth/login\` to get your JWT token
 3. Use the token to access protected endpoints
+4. Visit \`/docs\` for interactive API documentation
       `,
       version: '1.0.0',
       contact: {
@@ -111,7 +116,7 @@ The API is available at: \`http://localhost:${process.env.PORT || 4501}\`
 });
 
 await fastify.register(swaggerUi, {
-  routePrefix: '/api/docs',
+  routePrefix: '/docs',
   uiConfig: {
     docExpansion: 'list',
     deepLinking: true,
@@ -121,22 +126,17 @@ await fastify.register(swaggerUi, {
   },
   staticCSP: true,
   transformStaticCSP: (header: string) => header,
-  uiHooks: {
-    onRequest: async (request, reply) => {
-      // Allow access to Swagger UI
-    },
-  },
 });
 
 // Register routes
 await fastify.register(registerRoutes);
 
-// Start server
+// Here we are starting the server and listening to the port
 const start = async () => {
   try {
     const port = Number(process.env.PORT) || 4501;
     await fastify.listen({ port, host: '0.0.0.0' });
-    console.log(`🚀 Server running on http://localhost:${port}`);
+    console.log(`🚀 ICAP Server is running on http://localhost:${port}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

@@ -236,7 +236,7 @@ The system is deployed using Docker Desktop with the following architecture:
 │  │  Browser                                                            │     │
 │  │  http://localhost:4500 (Frontend)                                  │     │
 │  │  http://localhost:4501 (Backend API)                               │     │
-│  │  http://localhost:4501/api/docs (Swagger UI)                       │     │
+│  │  http://localhost:4501/docs (Swagger UI)                         │     │
 │  └────────────────────────────────────────────────────────────────────┘     │
 │                                                                               │
 │  Configuration Files:                                                         │
@@ -550,7 +550,7 @@ The `-d` flag runs containers in detached mode (background).
 3. **Access the application**:
 - **Frontend**: http://localhost:4500
 - **Backend API**: http://localhost:4501
-- **API Documentation (Swagger)**: http://localhost:4501/api/docs
+- **API Documentation (Swagger)**: http://localhost:4501/docs
 - **PostgreSQL**: localhost:5437
 
 #### Docker Compose Services
@@ -738,7 +738,7 @@ npm run dev
 
 The backend will run on `http://localhost:4501`
 
-**API Documentation**: Once the server is running, visit `http://localhost:4501/api/docs` to access the interactive Swagger UI documentation.
+**API Documentation**: Once the server is running, visit `http://localhost:4501/docs` to access the interactive Swagger UI documentation.
 
 ### Database Management
 
@@ -776,7 +776,7 @@ The frontend will run on `http://localhost:4500`
 
 ### Interactive API Documentation
 
-Visit **http://localhost:4501/api/docs** for interactive Swagger UI documentation with:
+Visit **http://localhost:4501/docs** for interactive Swagger UI documentation with:
 - Complete endpoint descriptions
 - Request/response schemas
 - Try-it-out functionality

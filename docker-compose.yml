@@ -33,11 +33,9 @@ services:
       NODE_ENV: production
       PORT: 4501
       JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
-      # Pass individual components - backend will construct DATABASE_URL from these
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-iacp}
-      # DATABASE_URL can be set in .env, or backend will construct it from components above
       DATABASE_URL: ${DATABASE_URL:-}
     ports:
       - "4501:4501"

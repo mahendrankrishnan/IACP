@@ -6,12 +6,12 @@ Once the backend server is running, you can access the Swagger API documentation
 
 **Local Development:**
 ```
-http://localhost:4501/api/docs
+http://localhost:4501/docs
 ```
 
 **Docker Container:**
 ```
-http://localhost:4501/api/docs
+http://localhost:4501/docs
 ```
 
 ## Features
@@ -132,7 +132,7 @@ For protected endpoints that require JWT authentication:
 
 The OpenAPI 3.0 specification is available at:
 ```
-http://localhost:4501/api/docs/json
+http://localhost:4501/docs/json
 ```
 
 You can use this JSON to:

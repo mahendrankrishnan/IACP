@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from '../services/auth.service.js';
+import { RoleService } from '../services/role.service.js';
 import { generateToken } from '../utils/token.utils.js';
 import type {
   RegisterBody,
@@ -16,6 +17,7 @@ import {
 
 export async function authRoutes(fastify: FastifyInstance) {
   const authService = new AuthService();
+  const roleService = new RoleService();
 
   // Register new user
   fastify.post<{ Body: RegisterBody }>(
@@ -89,6 +91,9 @@ export async function authRoutes(fastify: FastifyInstance) {
       const config = await authService.getClaimConfig();
       const token = await generateToken(fastify, user, config);
 
+      // Get user's applications and roles
+      const userApplicationsAndRoles = await roleService.getUserApplicationsAndRoles(user.id);
+
       return {
         message: 'Login successful',
         token,
@@ -98,6 +103,7 @@ export async function authRoutes(fastify: FastifyInstance) {
           email: user.email,
           phone: user.phone,
         },
+        applications: userApplicationsAndRoles.applications,
       };
     }
   );
