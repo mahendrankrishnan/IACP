@@ -26,11 +26,18 @@ const getConnectionString = (): string => {
     return process.env.DATABASE_URL;
   }
 
-  // Default fallback
-  return 'postgresql://postgres:postgres@localhost:5437/ownokta';
+  // Default fallback (for local development)
+  const defaultHost = process.env.NODE_ENV === 'production' ? 'postgres' : 'localhost';
+  const defaultPort = process.env.NODE_ENV === 'production' ? '5432' : '5437';
+  const defaultDb = 'iacp';
+  return `postgresql://postgres:postgres@${defaultHost}:${defaultPort}/${defaultDb}`;
 };
 
 const connectionString = getConnectionString();
+
+// Log connection details (without password for security)
+const connectionInfo = connectionString.replace(/:[^:@]+@/, ':****@');
+console.log(`Database connection: ${connectionInfo}`);
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 const client = postgres(connectionString, { max: 1 });
