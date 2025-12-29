@@ -13,8 +13,8 @@ RUN npm ci
 # Copy source files
 COPY src ./src
 COPY drizzle.config.ts ./
-# Copy migrations directory if it exists
-COPY drizzle ./drizzle
+# Note: drizzle migrations directory is not copied here as it may not exist on all machines
+# Migrations will be generated at runtime by docker-compose if needed
 
 # Build TypeScript
 RUN npm run build
@@ -38,8 +38,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./
 COPY --from=builder /app/drizzle.config.ts ./
-# Copy drizzle migrations from builder
-COPY --from=builder /app/drizzle ./drizzle
+# Create drizzle directory structure (migrations will be generated at runtime if needed)
+RUN mkdir -p ./drizzle/meta
 
 # Expose port
 EXPOSE 4501
