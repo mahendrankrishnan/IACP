@@ -48,8 +48,10 @@ services:
     networks:
       - iacp-network
     restart: unless-stopped
-    command: >
-      sh -c "
+    command:
+      - sh
+      - -c
+      - |
         echo 'Waiting for database to be ready...' &&
         until pg_isready -h postgres -p 5432 -U postgres > /dev/null 2>&1; do
           echo 'Waiting for postgres...'
@@ -60,26 +62,25 @@ services:
         mkdir -p drizzle/meta &&
         if [ ! -f drizzle/meta/_journal.json ]; then
           echo 'Creating drizzle journal file...' &&
-          echo '{"version":"5","dialect":"pg","entries":[]}' > drizzle/meta/_journal.json;
+          echo '{"version":"5","dialect":"pg","entries":[]}' > drizzle/meta/_journal.json
         fi &&
         if [ -f drizzle.config.ts ]; then
           echo 'drizzle.config.ts found' &&
           echo 'Checking if migrations need to be generated...' &&
-          MIGRATION_COUNT=$(find drizzle -name '*.sql' -type f 2>/dev/null | wc -l) &&
-          if [ "$MIGRATION_COUNT" -eq 0 ]; then
+          MIGRATION_COUNT=$$(find drizzle -name '*.sql' -type f 2>/dev/null | wc -l) &&
+          if [ "$$MIGRATION_COUNT" -eq 0 ]; then
             echo 'No migration SQL files found, generating migrations from schema...' &&
-            npm run db:generate || echo 'Migration generation completed or skipped';
+            npm run db:generate || echo 'Migration generation completed or skipped'
           else
-            echo "Found $MIGRATION_COUNT migration SQL files, skipping generation";
-          fi;
+            echo "Found $$MIGRATION_COUNT migration SQL files, skipping generation"
+          fi
         else
-          echo 'WARNING: drizzle.config.ts not found';
+          echo 'WARNING: drizzle.config.ts not found'
         fi &&
         echo 'Running migrations...' &&
         npm run db:migrate &&
         echo 'Starting server...' &&
         node dist/server.js
-      "
 
   frontend:
     build:
