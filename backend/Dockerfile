@@ -13,8 +13,9 @@ RUN npm ci
 # Copy source files
 COPY src ./src
 COPY drizzle.config.ts ./
-# Note: drizzle migrations directory is not copied here as it may not exist on all machines
-# Migrations will be generated at runtime by docker-compose if needed
+# Create drizzle directory structure with minimal journal file (will be populated by db:generate if needed)
+RUN mkdir -p ./drizzle/meta && \
+    echo '{"version":"5","dialect":"pg","entries":[]}' > ./drizzle/meta/_journal.json
 
 # Build TypeScript
 RUN npm run build
@@ -38,8 +39,9 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/tsconfig.json ./
 COPY --from=builder /app/drizzle.config.ts ./
-# Create drizzle directory structure (migrations will be generated at runtime if needed)
-RUN mkdir -p ./drizzle/meta
+# Create drizzle directory structure with minimal journal file (migrations will be generated at runtime if needed)
+RUN mkdir -p ./drizzle/meta && \
+    echo '{"version":"5","dialect":"pg","entries":[]}' > ./drizzle/meta/_journal.json
 
 # Expose port
 EXPOSE 4501
