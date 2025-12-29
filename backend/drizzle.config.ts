@@ -14,7 +14,7 @@ const getConnectionString = (): string => {
   // If we have the key components, construct the connection string
   if (user && password && database) {
     const dbHost = host || (process.env.NODE_ENV === 'production' ? 'postgres' : 'localhost');
-    const dbPort = port || (process.env.NODE_ENV === 'production' ? '5432' : '5435');
+    const dbPort = port || (process.env.NODE_ENV === 'production' ? '5432' : '5437');
     return `postgresql://${user}:${password}@${dbHost}:${dbPort}/${database}`;
   }
 
@@ -23,8 +23,11 @@ const getConnectionString = (): string => {
     return process.env.DATABASE_URL;
   }
 
-  // Default fallback
-  return 'postgresql://postgres:postgres@localhost:5437/ownokta';
+  // Default fallback (for local development)
+  const defaultHost = process.env.NODE_ENV === 'production' ? 'postgres' : 'localhost';
+  const defaultPort = process.env.NODE_ENV === 'production' ? '5432' : '5437';
+  const defaultDb = 'iacp';
+  return `postgresql://postgres:postgres@${defaultHost}:${defaultPort}/${defaultDb}`;
 };
 
 export default {

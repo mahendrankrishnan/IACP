@@ -56,8 +56,16 @@ services:
           sleep 2
         done &&
         echo 'Database is ready!' &&
-        echo 'Generating migrations if needed...' &&
-        (npm run db:generate || echo 'Migrations already exist or will be created') &&
+        echo 'Checking for drizzle.config.ts...' &&
+        ls -la drizzle.config.ts 2>&1 || echo 'drizzle.config.ts not found in current directory' &&
+        pwd &&
+        if [ -f drizzle.config.ts ]; then
+          echo 'drizzle.config.ts found, generating migrations if needed...' &&
+          (npm run db:generate || echo 'Migrations already exist or generation skipped');
+        else
+          echo 'WARNING: drizzle.config.ts not found, skipping migration generation' &&
+          echo 'Migrations should be committed to git or generated manually';
+        fi &&
         echo 'Running migrations...' &&
         npm run db:migrate &&
         echo 'Starting server...' &&
