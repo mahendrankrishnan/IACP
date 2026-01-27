@@ -54,6 +54,31 @@ export const userApplications = pgTable('user_applications', {
   uniqueUserApp: unique().on(table.userId, table.appId),
 }));
 
+export const webhooks = pgTable('webhooks', {
+  id: serial('id').primaryKey(),
+  url: varchar('url', { length: 500 }).notNull(),
+  eventType: varchar('event_type', { length: 50 }).notNull(), // 'login' or 'logout'
+  appId: integer('app_id').references(() => applications.id, { onDelete: 'cascade' }),
+  secret: varchar('secret', { length: 255 }), // Optional secret for signing webhook payloads
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export const webhookEvents = pgTable('webhook_events', {
+  id: serial('id').primaryKey(),
+  webhookId: integer('webhook_id').notNull().references(() => webhooks.id, { onDelete: 'cascade' }),
+  eventType: varchar('event_type', { length: 50 }).notNull(), // 'login' or 'logout'
+  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
+  appId: integer('app_id').references(() => applications.id, { onDelete: 'set null' }),
+  status: varchar('status', { length: 20 }).notNull(), // 'success', 'failed', 'pending'
+  statusCode: integer('status_code'), // HTTP status code from webhook endpoint
+  responseTime: integer('response_time'), // Response time in milliseconds
+  errorMessage: varchar('error_message', { length: 500 }), // Error message if failed
+  payload: varchar('payload', { length: 5000 }), // JSON payload that was sent
+  triggeredAt: timestamp('triggered_at').defaultNow().notNull(),
+});
+
 // Relations
 export const rolesRelations = relations(roles, ({ many }) => ({
   appRoles: many(appRoles),
@@ -102,4 +127,8 @@ export type AppRole = typeof appRoles.$inferSelect;
 export type NewAppRole = typeof appRoles.$inferInsert;
 export type UserApplication = typeof userApplications.$inferSelect;
 export type NewUserApplication = typeof userApplications.$inferInsert;
+export type Webhook = typeof webhooks.$inferSelect;
+export type NewWebhook = typeof webhooks.$inferInsert;
+export type WebhookEvent = typeof webhookEvents.$inferSelect;
+export type NewWebhookEvent = typeof webhookEvents.$inferInsert;
 

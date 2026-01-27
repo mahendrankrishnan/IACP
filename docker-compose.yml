@@ -15,12 +15,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
       - iacp-network
+    # Create additional databases if needed
+    command: >
+      postgres
+      -c max_connections=200
 
   backend:
     build:
@@ -40,6 +44,13 @@ services:
       POSTGRES_PORT: 5432
       # DATABASE_URL will be constructed from individual components if not provided
       DATABASE_URL: ${DATABASE_URL:-}
+      # Email Configuration (Gmail)
+      EMAIL_ENABLED: ${EMAIL_ENABLED:-false}
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM: ${SMTP_FROM:-}
     ports:
       - "4501:4501"
     depends_on:
@@ -58,6 +69,8 @@ services:
           sleep 2
         done &&
         echo 'Database is ready!' &&
+        echo 'Ensuring database exists...' &&
+        PGPASSWORD=$$POSTGRES_PASSWORD psql -h postgres -U $$POSTGRES_USER -d postgres -tc "SELECT 1 FROM pg_database WHERE datname = '$$POSTGRES_DB'" | grep -q 1 || PGPASSWORD=$$POSTGRES_PASSWORD psql -h postgres -U $$POSTGRES_USER -d postgres -c "CREATE DATABASE $$POSTGRES_DB" || echo 'Database may already exist or creation failed' &&
         echo 'Checking drizzle setup...' &&
         mkdir -p drizzle/meta &&
         if [ ! -f drizzle/meta/_journal.json ]; then

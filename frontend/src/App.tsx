@@ -9,6 +9,7 @@ import Roles from './components/Roles'
 import Applications from './components/Applications'
 import AppRoles from './components/AppRoles'
 import UserSearch from './components/UserSearch'
+import About from './components/About'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Footer from './components/Footer'
@@ -152,6 +153,14 @@ function App() {
               element={
                 isAuthenticated ? 
                   <UserSearch /> : 
+                  <Navigate to="/login" replace />
+              } 
+            />
+            <Route 
+              path="/about" 
+              element={
+                isAuthenticated ? 
+                  <About /> : 
                   <Navigate to="/login" replace />
               } 
             />

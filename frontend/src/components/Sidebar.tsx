@@ -16,6 +16,7 @@ function Sidebar() {
     { path: '/applications', label: 'Applications', icon: '📱' },
     { path: '/app-roles', label: 'App Roles', icon: '🔐' },
     { path: '/config', label: 'Config', icon: '⚙️' },
+    { path: '/about', label: 'About', icon: 'ℹ️' },
   ]
 
   return (

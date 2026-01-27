@@ -238,3 +238,32 @@ export const decodeSchema: FastifySchema = {
   },
 };
 
+export const logoutSchema: FastifySchema = {
+  description: 'Logout user and trigger webhooks',
+  tags: ['auth'],
+  security: [{ bearerAuth: [] }],
+  querystring: {
+    type: 'object',
+    properties: {
+      appId: {
+        type: 'string',
+        description: 'Optional application ID to filter webhooks',
+      },
+    },
+  },
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        message: { type: 'string' },
+      },
+    },
+    401: {
+      type: 'object',
+      properties: {
+        error: { type: 'string' },
+      },
+    },
+  },
+};
+

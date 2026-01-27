@@ -855,6 +855,89 @@ All API endpoints use Fastify's built-in JSON schema validation:
 
 Invalid requests are automatically rejected with `400 Bad Request` and detailed error messages before reaching route handlers.
 
+## Email Notifications
+
+IACP supports sending email notifications when new user accounts are created. The system uses **Nodemailer** with Gmail SMTP support.
+
+### Features
+
+- ✅ Welcome emails sent automatically on user registration
+- ✅ Account creation notifications when admin creates users
+- ✅ HTML email templates with professional styling
+- ✅ Gmail SMTP support (and other SMTP providers)
+- ✅ Non-blocking email sending (doesn't affect API response time)
+
+### Gmail Setup
+
+To use Gmail for sending emails, you need to generate an **App Password**:
+
+1. **Enable 2-Step Verification** on your Google Account:
+   - Go to [Google Account Security](https://myaccount.google.com/security)
+   - Enable "2-Step Verification"
+
+2. **Generate App Password**:
+   - Go to [App Passwords](https://myaccount.google.com/apppasswords)
+   - Select "Mail" and "Other (Custom name)"
+   - Enter "IACP" as the app name
+   - Copy the generated 16-character password
+
+3. **Configure Environment Variables**:
+
+Add these to your `.env` file:
+
+```env
+# Email Configuration
+EMAIL_ENABLED=true
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASSWORD=your-16-char-app-password
+SMTP_FROM=your-email@gmail.com  # Optional, defaults to SMTP_USER
+```
+
+**Important**: Use the **App Password** (not your regular Gmail password) in `SMTP_PASSWORD`.
+
+### Docker Configuration
+
+The email environment variables are already configured in `docker-compose.yml`. Just add them to your `.env` file and they will be automatically loaded.
+
+### Email Templates
+
+#### Welcome Email (Self-Registration)
+- Sent when users register themselves via `/api/auth/register`
+- Includes welcome message and platform information
+
+#### Account Creation Email (Admin-Created)
+- Sent when admins create users via `/api/users`
+- Includes account credentials if password was set
+- Includes instructions for first-time login
+
+### Testing Email
+
+1. **Enable email service**: Set `EMAIL_ENABLED=true` in `.env`
+2. **Register a new user**: The welcome email will be sent automatically
+3. **Check logs**: Email sending status is logged in console
+
+### Troubleshooting
+
+- **Email not sending**: Check `EMAIL_ENABLED` is set to `true`
+- **Authentication failed**: Verify App Password is correct (not regular password)
+- **Connection timeout**: Ensure firewall allows SMTP port 587
+- **Gmail blocks**: If using personal Gmail, ensure "Less secure app access" is not required (use App Password instead)
+
+### Other SMTP Providers
+
+The email service supports any SMTP provider. Just update the configuration:
+
+```env
+EMAIL_ENABLED=true
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587  # or 465 for SSL
+SMTP_USER=your-email@yourdomain.com
+SMTP_PASSWORD=your-password
+SMTP_FROM=noreply@yourdomain.com
+```
+
 ## Security Notes
 
 ⚠️ **Important for Production:**

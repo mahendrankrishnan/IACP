@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { AuthService } from '../services/auth.service.js';
 import { RoleService } from '../services/role.service.js';
+import { emailService } from '../services/email.service.js';
 import type { RegisterBody, UpdateUserBody } from '../types/index.js';
 import {
   getAllUsersSchema,
@@ -56,6 +57,12 @@ export async function userRoutes(fastify: FastifyInstance) {
 
       // Create user
       const user = await authService.createUser(username, email, password, phone);
+
+      // Send account creation email (non-blocking)
+      // If password was provided in request, include it in the email
+      emailService.sendAccountCreationEmail(user.email, user.username, password).catch((err) => {
+        console.error('Failed to send account creation email:', err);
+      });
 
       return {
         message: 'User created successfully',
