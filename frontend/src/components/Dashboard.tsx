@@ -6,6 +6,16 @@ interface DashboardProps {
   user: User
 }
 
+const formatPhone = (phone: string | undefined): string => {
+  if (!phone) return 'N/A'
+  const digits = phone.replace(/\D/g, '')
+  const normalized = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits
+  if (normalized.length === 10) {
+    return `(${normalized.slice(0, 3)}) ${normalized.slice(3, 6)}-${normalized.slice(6)}`
+  }
+  return phone
+}
+
 function Dashboard({ user }: DashboardProps) {
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'))
   const [decodedToken, setDecodedToken] = useState<JWTPayload | null>(null)
@@ -68,7 +78,7 @@ function Dashboard({ user }: DashboardProps) {
           </div>
           <div className="info-item">
             <span className="info-label">Phone:</span>
-            <span className="info-value">{user?.phone}</span>
+            <span className="info-value">{formatPhone(user?.phone)}</span>
           </div>
         </div>
 

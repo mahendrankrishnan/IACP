@@ -19,6 +19,7 @@ function About() {
           <p>
             <strong>IACP</strong> stands for <strong>Identity, Auth, Claim, Provider</strong> - a custom authentication 
             and authorization service provider that acts as a centralized identity management system.
+            This service allows applications to delegate user authentication and authorization tasks for all my applications.
           </p>
         </div>
 

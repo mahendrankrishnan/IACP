@@ -85,6 +85,10 @@
   color: #333;
 }
 
+.users-table .phone-column {
+  white-space: nowrap;
+}
+
 .users-table tbody tr:hover {
   background: #f8f9fa;
 }

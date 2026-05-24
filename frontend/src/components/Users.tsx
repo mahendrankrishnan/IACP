@@ -85,7 +85,17 @@ function Users() {
   const formatDate = (dateString: string | Date | undefined): string => {
     if (!dateString) return 'N/A'
     const date = new Date(dateString)
-    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
+    return date.toLocaleDateString()
+  }
+
+  const formatPhone = (phone: string | undefined): string => {
+    if (!phone) return 'N/A'
+    const digits = phone.replace(/\D/g, '')
+    const normalized = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits
+    if (normalized.length === 10) {
+      return `(${normalized.slice(0, 3)}) ${normalized.slice(3, 6)}-${normalized.slice(6)}`
+    }
+    return phone
   }
 
   return (
@@ -135,9 +145,8 @@ function Users() {
                 <table className="users-table">
                   <thead>
                     <tr>
-                      <th>Username</th>
                       <th>Email</th>
-                      <th>Phone</th>
+                      <th className="phone-column">Phone</th>
                       <th>Created At</th>
                       <th>Updated At</th>
                       <th>Actions</th>
@@ -146,9 +155,8 @@ function Users() {
                   <tbody>
                     {users.map((user) => (
                       <tr key={user.id}>
-                        <td>{user.username}</td>
                         <td>{user.email}</td>
-                        <td>{user.phone}</td>
+                        <td className="phone-column">{formatPhone(user.phone)}</td>
                         <td>{formatDate(user.createdAt)}</td>
                         <td>{formatDate(user.updatedAt)}</td>
                         <td>

@@ -82,8 +82,12 @@ export async function authRoutes(fastify: FastifyInstance) {
         });
       }
 
-      // Verify phone number matches
-      if (user.phone !== phone) {
+      // Verify phone number matches (ignore formatting differences)
+      const normalizePhone = (p: string): string => {
+        const digits = p.replace(/\D/g, '');
+        return digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+      };
+      if (normalizePhone(user.phone) !== normalizePhone(phone)) {
         return reply.code(401).send({
           error: 'Invalid email, phone, or password',
         });
